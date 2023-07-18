@@ -24,6 +24,7 @@ public class TextProcessors {
             return Collections.emptyList();
         }
     }
+
     private void readFromFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -48,15 +49,27 @@ public class TextProcessors {
         }
     }
 
-    @TextProcessor.MethodName(".upperCase")
-    public class UppercaseProcessor implements TextProcessor.Processor {
+    @TextProcessor.MethodName(".unique")
+    public class UniqueProcessor implements TextProcessor.Processor {
         @Override
         public List<String> process() {
-            List<String> result = new ArrayList<>();
-            for (String s : words) {
-                result.add(s.toUpperCase());
-            }
-            return result;
+            Set<String> uniqueWords = new HashSet<>(words);
+            return new ArrayList<>(uniqueWords);
         }
     }
-}
+    @TextProcessor.MethodName(".grouped")
+    public class GroupedProcessor implements TextProcessor.Processor {
+        @Override
+        public List<String> process() {
+            Map<String, Integer> wordOccurrences = new HashMap<>();
+            for (String word : words) {
+                wordOccurrences.put(word, wordOccurrences.getOrDefault(word, 0) + 1);
+            }
+
+            List<String> groupedWords = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : wordOccurrences.entrySet()) {
+                groupedWords.add(entry.getKey() + ": " + entry.getValue());
+            }
+            return groupedWords;
+        }
+    }}
