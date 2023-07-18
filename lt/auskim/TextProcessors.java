@@ -10,7 +10,7 @@ public class TextProcessors {
         words = new ArrayList<>();
     }
 
-    @TextProcessor.MethodName(".sort")
+    @TextProcessor.MethodName("sort")
     public class SortProcessor implements TextProcessor.Processor {
         @Override
         public List<String> process() {
@@ -20,7 +20,7 @@ public class TextProcessors {
         }
     }
 
-    @TextProcessor.MethodName(".unique")
+    @TextProcessor.MethodName("unique")
     public class UniqueProcessor implements TextProcessor.Processor {
         @Override
         public List<String> process() {
@@ -28,7 +28,7 @@ public class TextProcessors {
             return new ArrayList<>(uniqueWords);
         }
     }
-    @TextProcessor.MethodName(".grouped")
+    @TextProcessor.MethodName("grouped")
     public class GroupedProcessor implements TextProcessor.Processor {
         @Override
         public List<String> process() {

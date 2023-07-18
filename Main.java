@@ -13,6 +13,7 @@ public class Main {
 
         input.process(TextProcessors.GroupedProcessor.class);
         input.printWords();
+        input.writeProcessedWordsToFile();
 
         System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.SortProcessor.class));
         System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.GroupedProcessor.class));
