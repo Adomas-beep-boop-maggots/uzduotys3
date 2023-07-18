@@ -9,8 +9,8 @@ public class Main {
         System.out.println("Sort Processor: " + TextProcessorMapper.getProcessorName(TextProcessors.SortProcessor.class));
         System.out.println("Sort Processor: " + TextProcessorMapper.getMethodAndProcessorName(TextProcessors.SortProcessor.class));
 
-        List<String> words = new TextProcessors("input.txt").new SortProcessor().process();
-        new TextProcessors("input.txt");
+        TextProcessors input = new TextProcessors("input.txt");
+        List<String> words = input.process(TextProcessors.SortProcessor.class);
         for (String word : words) {
             System.out.println(word);
         }

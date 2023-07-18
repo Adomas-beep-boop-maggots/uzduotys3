@@ -15,6 +15,16 @@ public class TextProcessors {
         readFromFile(filePath);
     }
 
+    public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
+        try {
+            TextProcessor.Processor processor = processorClass.getDeclaredConstructor().newInstance();
+            return processor.process();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 //    public List<String> getWords() {
 //        return words;
 //    }
