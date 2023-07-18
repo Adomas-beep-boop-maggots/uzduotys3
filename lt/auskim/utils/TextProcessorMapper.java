@@ -30,7 +30,7 @@ public class TextProcessorMapper {
 
     public static void registerDefaultProcessors() {
         TextProcessorMapper.registerProcessor(TextProcessors.UppercaseProcessor.class);
-//        TextProcessorMapper.registerProcessor(TextProcessors.SortProcessor.class);
+        TextProcessorMapper.registerProcessor(TextProcessors.SortProcessor.class);
 //        TextProcessorMapper.registerProcessor(TextProcessors.ReverseProcessor.class);
     }
 }
