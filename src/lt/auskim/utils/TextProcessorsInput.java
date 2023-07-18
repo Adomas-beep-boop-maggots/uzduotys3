@@ -43,18 +43,14 @@ public class TextProcessorsInput {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        processingRequired = true; // Set the flag to true after new text is read
     }
 
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
-            if (processingRequired) { // Check if processing is needed
-                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-                System.out.println(processor);
-                processedWords = processor.process();
-                this.processor = processor;
-//                processingRequired = false; // Set the flag to false after processing is done
-            }
+            TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+            System.out.println(processor);
+            processedWords = processor.process();
+            this.processor = processor;
             writeProcessedWordsToFile(processorClass);
             return processedWords;
         } catch (Exception e) {
@@ -84,7 +80,7 @@ public class TextProcessorsInput {
         }
     }
 
-    public void deleteOutputFiles() {
+    public void deleteAllOutputFiles() {
         List<String> methodNames = TextProcessorMapper.getAllMethodNames();
         String outputDirectory = "output/";
 
