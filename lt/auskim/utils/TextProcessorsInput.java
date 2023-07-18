@@ -5,15 +5,13 @@ import lt.auskim.TextProcessors;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class TextProcessorsInput {
-//    private List<String> words;
     private TextProcessors textProcessors;
-
     private List<String> words;
+    private List<String> processedWords;
 
 
     public TextProcessorsInput(TextProcessors textProcessors, String filePath) {
@@ -39,6 +37,7 @@ public class TextProcessorsInput {
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
             TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+            processedWords = processor.process();
             return processor.process();
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +45,13 @@ public class TextProcessorsInput {
         }
     }
 
-    public List<String> getWords() {
-        return words;
+    public void printWords() {
+        if (processedWords.isEmpty()) {
+            System.out.println("No processed words to print. Please run process() first.");
+        } else {
+            for (String word : processedWords) {
+                System.out.println(word);
+            }
+        }
     }
 }

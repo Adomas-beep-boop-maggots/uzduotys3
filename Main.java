@@ -11,11 +11,8 @@ public class Main {
 
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
 
-        List<String> words = input.process(TextProcessors.SortProcessor.class);
-
-        for (String word : words) {
-            System.out.println(word);
-        }
+        input.process(TextProcessors.GroupedProcessor.class);
+        input.printWords();
 
         System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.SortProcessor.class));
         System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.GroupedProcessor.class));

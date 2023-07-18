@@ -1,7 +1,4 @@
 package lt.auskim.utils;
-
-import lt.auskim.TextProcessors;
-
 import java.util.*;
 
 public class TextProcessorMapper {
@@ -27,10 +24,4 @@ public class TextProcessorMapper {
             METHOD_MAP.put(processorClass, methodName.value());
         }
     }
-
-//    public static void registerDefaultProcessors() {
-//        TextProcessorMapper.registerProcessor(TextProcessors.UppercaseProcessor.class);
-//        TextProcessorMapper.registerProcessor(TextProcessors.SortProcessor.class);
-////        TextProcessorMapper.registerProcessor(TextProcessors.ReverseProcessor.class);
-//    }
 }

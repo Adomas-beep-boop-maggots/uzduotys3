@@ -1,12 +1,6 @@
 package lt.auskim;
 
 import lt.auskim.utils.TextProcessor;
-import lt.auskim.utils.TextProcessorsInput;
-
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class TextProcessors {
@@ -49,4 +43,5 @@ public class TextProcessors {
             }
             return groupedWords;
         }
-    }}
+    }
+}
