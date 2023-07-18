@@ -8,7 +8,7 @@ public class TextProcessorMapper {
     private static Map<Class<? extends TextProcessor.Processor>, String> METHOD_MAP = new HashMap<>();
 
     public static String getMethodName(Class<? extends TextProcessor.Processor> processorClass) {
-        return METHOD_MAP.getOrDefault(processorClass, "Unknown");
+        return processorClass.getSimpleName();
     }
 
     public static String getProcessorName(Class<? extends TextProcessor.Processor> processorClass) {
