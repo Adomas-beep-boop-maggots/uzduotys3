@@ -11,7 +11,7 @@ public class Main {
 
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
 
-        input.process(TextProcessors.GroupedProcessor.class);
+        input.process(TextProcessors.SortProcessor.class);
         input.printWords();
         input.writeProcessedWordsToFile();
 

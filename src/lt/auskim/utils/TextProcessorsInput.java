@@ -24,9 +24,14 @@ public class TextProcessorsInput {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] wordsInLine = line.split("\\W+");
-                for (String word : wordsInLine) {
-                    words.add(word.toLowerCase());
+                line = line.trim(); // Trim leading and trailing whitespace
+                if (!line.isEmpty()) { // Skip empty lines
+                    String[] wordsInLine = line.split("\\W+");
+                    for (String word : wordsInLine) {
+                        if (!word.isEmpty()) {
+                            words.add(word.toLowerCase());
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
@@ -37,8 +42,8 @@ public class TextProcessorsInput {
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
             TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-            processedWords = processor.process();
             this.processor = processor;
+            this.processedWords = processor.process();
             return processor.process();
         } catch (Exception e) {
             e.printStackTrace();
