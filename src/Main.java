@@ -2,21 +2,19 @@ import lt.auskim.TextProcessors;
 import lt.auskim.utils.TextProcessorMapper;
 import lt.auskim.utils.TextProcessorsInput;
 
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
 
         TextProcessors textProcessors = new TextProcessors();
 
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
+        input.deleteOutputFiles();
 
-        input.process(TextProcessors.SortProcessor.class);
-        input.printWords();
-        input.writeProcessedWordsToFile();
+//        input.process(TextProcessors.GroupedProcessor.class);
+//        input.printWords();
+//        input.writeProcessedWordsToFile();
 
-        System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.SortProcessor.class));
-        System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.GroupedProcessor.class));
-        System.out.println("Processor: " + TextProcessorMapper.getMethodName(TextProcessors.UniqueProcessor.class));
+
+        System.out.println("Processors:" + TextProcessorMapper.getAllMethodNames());
     }
 }

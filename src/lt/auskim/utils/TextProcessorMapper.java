@@ -32,6 +32,14 @@ public class TextProcessorMapper {
         return "Method Name: " + methodName + ", Processor Name: " + processorName;
     }
 
+    public static List<String> getAllMethodNames() {
+        List<String> processorNames = new ArrayList<>();
+        for (Class<? extends TextProcessor.Processor> processorClass : METHOD_MAP.keySet()) {
+            processorNames.add(getMethodName(processorClass));
+        }
+        return processorNames;
+    }
+
     static {
         // Register method names for processors here
         registerProcessor(TextProcessors.SortProcessor.class);

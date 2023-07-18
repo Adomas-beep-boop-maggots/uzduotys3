@@ -13,8 +13,11 @@ public class TextProcessorsInput {
 
     private TextProcessor.Processor processor;
 
+    private String outputDirectory;
+
 
     public TextProcessorsInput(TextProcessors textProcessors, String filePath) {
+        String outputDirectory = "output/";
         this.textProcessors = textProcessors;
         words = textProcessors.words;
         readFromFile(filePath);
@@ -61,6 +64,30 @@ public class TextProcessorsInput {
         }
     }
 
+    public void deleteOutputFiles() {
+        List<String> methodNames = TextProcessorMapper.getAllMethodNames();
+        String outputDirectory = "output/";
+
+        for (String methodName : methodNames) {
+            String outputFile = outputDirectory + "output." + methodName;
+
+            try {
+                File file = new File(outputFile);
+                if (file.exists()) {
+                    if (file.delete()) {
+                        System.out.println("Deleted: " + outputFile);
+                    } else {
+                        System.out.println("Failed to delete: " + outputFile);
+                    }
+                } else {
+                    System.out.println("File not found: " + outputFile);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void writeProcessedWordsToFile() {
         if (processedWords.isEmpty()) {
             System.out.println("No processed words to write. Please run process() first.");
@@ -68,10 +95,8 @@ public class TextProcessorsInput {
         }
 
         String processorName = TextProcessorMapper.getMethodName(processor.getClass());
-        String outputDirectory = "output/";
+//        String outputDirectory = "output/";
         String outputFile = outputDirectory + "output." + processorName;
-
-        System.out.println(outputFile);
 
         try {
             File directory = new File(outputDirectory);
