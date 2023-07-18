@@ -3,6 +3,7 @@ package lt.auskim.utils;
 import lt.auskim.TextProcessors;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,16 +11,18 @@ public class TextProcessorsInput {
     private TextProcessors textProcessors;
     private List<String> words;
     private List<String> processedWords;
+    private boolean processingRequired; // New flag to determine if processing is needed
 
     private TextProcessor.Processor processor;
 
     private String outputDirectory;
 
-
     public TextProcessorsInput(TextProcessors textProcessors, String filePath) {
-        String outputDirectory = "output/";
+        outputDirectory = "output/";
         this.textProcessors = textProcessors;
         words = textProcessors.words;
+        processedWords = new ArrayList<>();
+        processingRequired = true; // Set the flag to true initially
         readFromFile(filePath);
     }
 
@@ -40,20 +43,23 @@ public class TextProcessorsInput {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        processingRequired = true; // Set the flag to true after new text is read
     }
 
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
-            TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-            this.processor = processor;
-            this.processedWords = processor.process();
-            return processor.process();
+            if (processingRequired) { // Check if processing is needed
+                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+                processedWords = processor.process();
+                this.processor = processor;
+                processingRequired = false; // Set the flag to false after processing is done
+            }
+            return processedWords;
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
-
     public void printWords() {
         if (processedWords.isEmpty()) {
             System.out.println("No processed words to print. Please run process() first.");
