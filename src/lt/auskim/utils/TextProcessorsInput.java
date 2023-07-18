@@ -26,7 +26,7 @@ public class TextProcessorsInput {
         readFromFile(filePath);
     }
 
-    public void readFromFile(String filePath) {
+    private void readFromFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -50,16 +50,30 @@ public class TextProcessorsInput {
         try {
             if (processingRequired) { // Check if processing is needed
                 TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+                System.out.println(processor);
                 processedWords = processor.process();
                 this.processor = processor;
-                processingRequired = false; // Set the flag to false after processing is done
+//                processingRequired = false; // Set the flag to false after processing is done
             }
+            writeProcessedWordsToFile(processorClass);
             return processedWords;
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
+
+    public void processAll() {
+        List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
+        for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
+            try {
+                this.process(processorClass);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void printWords() {
         if (processedWords.isEmpty()) {
             System.out.println("No processed words to print. Please run process() first.");
@@ -94,13 +108,13 @@ public class TextProcessorsInput {
         }
     }
 
-    public void writeProcessedWordsToFile() {
+    public void writeProcessedWordsToFile(Class<? extends TextProcessor.Processor> processor) {
         if (processedWords.isEmpty()) {
             System.out.println("No processed words to write. Please run process() first.");
             return;
         }
 
-        String processorName = TextProcessorMapper.getMethodName(processor.getClass());
+        String processorName = TextProcessorMapper.getMethodName(processor);
 //        String outputDirectory = "output/";
         String outputFile = outputDirectory + "output." + processorName;
 

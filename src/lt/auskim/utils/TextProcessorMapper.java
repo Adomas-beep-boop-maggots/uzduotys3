@@ -26,6 +26,15 @@ public class TextProcessorMapper {
         return processorClass.getSimpleName();
     }
 
+    public static Class<? extends TextProcessor.Processor> getProcessorClass(String methodName) {
+        for (Map.Entry<Class<? extends TextProcessor.Processor>, String> entry : METHOD_MAP.entrySet()) {
+            if (entry.getValue().equals(methodName)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     public static String getMethodAndProcessorName(Class<? extends TextProcessor.Processor> processorClass) {
         String methodName = getMethodName(processorClass);
         String processorName = processorClass.getSimpleName();
@@ -38,6 +47,18 @@ public class TextProcessorMapper {
             processorNames.add(getMethodName(processorClass));
         }
         return processorNames;
+    }
+
+    public static List<String> getAllProcessorNames() {
+        List<String> processorNames = new ArrayList<>();
+        for (Class<? extends TextProcessor.Processor> processorClass : METHOD_MAP.keySet()) {
+            processorNames.add(getProcessorName(processorClass));
+        }
+        return processorNames;
+    }
+
+    public static List<Class<? extends TextProcessor.Processor>> getAllProcessorClasses() {
+        return new ArrayList<>(METHOD_MAP.keySet());
     }
 
     static {

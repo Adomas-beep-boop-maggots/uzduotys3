@@ -8,13 +8,12 @@ public class Main {
         TextProcessors textProcessors = new TextProcessors();
 
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
-        input.deleteOutputFiles();
+//        input.deleteOutputFiles();
 
 //        input.process(TextProcessors.GroupedProcessor.class);
-//        input.printWords();
-//        input.writeProcessedWordsToFile();
+        input.processAll();
 
 
-        System.out.println("Processors:" + TextProcessorMapper.getAllMethodNames());
+//        System.out.println("Processors:" + TextProcessorMapper.getAllMethodNames());
     }
 }
