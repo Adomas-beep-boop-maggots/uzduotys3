@@ -17,18 +17,13 @@ public class TextProcessors {
 
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
-            TextProcessor.Processor processor = processorClass.getDeclaredConstructor().newInstance();
+            TextProcessor.Processor processor = processorClass.getDeclaredConstructor(this.getClass()).newInstance(this);
             return processor.process();
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
-
-//    public List<String> getWords() {
-//        return words;
-//    }
-
     private void readFromFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -64,30 +59,4 @@ public class TextProcessors {
             return result;
         }
     }
-
-
-
-
-//    @MethodName(".sort")
-//    public static class SortProcessor implements TextProcessor {
-//        @Override
-//        public List<String> process() {
-//            List<String> result = new ArrayList<>(inputList);
-//            Collections.sort(result, String.CASE_INSENSITIVE_ORDER);
-//            return result;
-//        }
-//    }
-//
-//    // Implement the reverse text processor
-//    @MethodName(".reverse")
-//    public static class ReverseProcessor implements TextProcessor {
-//        @Override
-//        public List<String> process() {
-//            List<String> result = new ArrayList<>();
-//            for (String s : inputList) {
-//                result.add(new StringBuilder(s).reverse().toString());
-//            }
-//            return result;
-//        }
-//    }
 }
