@@ -8,12 +8,14 @@ public class Main {
         TextProcessors textProcessors = new TextProcessors();
 
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
-        input.deleteAllOutputFiles();
+//        input.deleteAllOutputFiles();
 
 //      Process all
         input.processAll();
+        input.processAll();
 
 //      Process one
-//        input.process(TextProcessors.GroupedProcessor.class);
+        input.process(TextProcessors.GroupedProcessor.class);
+        input.process(TextProcessors.GroupedProcessor.class);
     }
 }

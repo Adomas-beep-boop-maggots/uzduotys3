@@ -3,15 +3,14 @@ package lt.auskim.utils;
 import lt.auskim.TextProcessors;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class TextProcessorsInput {
     private TextProcessors textProcessors;
     private List<String> words;
     private List<String> processedWords;
-    private boolean processingRequired; // New flag to determine if processing is needed
+//    private boolean processingRequired; // New flag to determine if processing is needed
+    private Map<Class<? extends TextProcessor.Processor>, Boolean> processingRequiredList;
 
     private TextProcessor.Processor processor;
 
@@ -22,7 +21,7 @@ public class TextProcessorsInput {
         this.textProcessors = textProcessors;
         words = textProcessors.words;
         processedWords = new ArrayList<>();
-        processingRequired = true; // Set the flag to true initially
+        processingRequiredList = new HashMap<>();
         readFromFile(filePath);
     }
 
@@ -40,6 +39,10 @@ public class TextProcessorsInput {
                     }
                 }
             }
+            List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
+            for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
+                processingRequiredList.put(processorClass, true);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,11 +50,13 @@ public class TextProcessorsInput {
 
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
-            TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-            System.out.println(processor);
-            processedWords = processor.process();
-            this.processor = processor;
-            writeProcessedWordsToFile(processorClass);
+            if (processingRequiredList.get(processorClass)) {
+                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+                processedWords = processor.process();
+                this.processor = processor;
+                processingRequiredList.put(processorClass, false);
+                writeProcessedWordsToFile(processorClass);
+            }
             return processedWords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,6 +68,7 @@ public class TextProcessorsInput {
         List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
         for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
             try {
+//                processingRequired = true;
                 this.process(processorClass);
             } catch (Exception e) {
                 e.printStackTrace();
