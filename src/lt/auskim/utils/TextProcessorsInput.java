@@ -68,7 +68,6 @@ public class TextProcessorsInput<T extends TextProcessors> {
 //        try {
 ////            if (processingRequiredList.get(processorClass)) {
 //                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-////                TextProcessorMapper.registerProcessor(processor);
 //                processedWords = processor.process(words);
 //                this.processor = processor;
 ////                processingRequiredList.put(processorClass, false);
@@ -119,29 +118,29 @@ public class TextProcessorsInput<T extends TextProcessors> {
         }
     }
 
-//    public void deleteAllOutputFiles() {
-//        List<String> methodNames = TextProcessorMapper.getAllMethodNames();
-//        String outputDirectory = "output/";
-//
-//        for (String methodName : methodNames) {
-//            String outputFile = outputDirectory + "output." + methodName;
-//
-//            try {
-//                File file = new File(outputFile);
-//                if (file.exists()) {
-//                    if (file.delete()) {
-//                        System.out.println("Deleted: " + outputFile);
-//                    } else {
-//                        System.out.println("Failed to delete: " + outputFile);
-//                    }
-//                } else {
-//                    System.out.println("File not found: " + outputFile);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void deleteAllOutputFiles() {
+        List<String> methodNames = TextProcessorMapper.getAllMethodNames(textProcessors);
+        String outputDirectory = "output/";
+
+        for (String methodName : methodNames) {
+            String outputFile = outputDirectory + "output." + methodName;
+
+            try {
+                File file = new File(outputFile);
+                if (file.exists()) {
+                    if (file.delete()) {
+                        System.out.println("Deleted: " + outputFile);
+                    } else {
+                        System.out.println("Failed to delete: " + outputFile);
+                    }
+                } else {
+                    System.out.println("File not found: " + outputFile);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void writeProcessedWordsToFile(Class<? extends TextProcessor> processor) {
         if (processedWords.isEmpty()) {

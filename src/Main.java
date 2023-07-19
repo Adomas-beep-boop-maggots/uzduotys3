@@ -28,7 +28,8 @@ public class Main {
         TextProcessors textProcessors = new TextProcessors();
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
 //
-//        input.deleteAllOutputFiles();
+//        input.processAll();
+        input.deleteAllOutputFiles();
 //      Process all
 //        input.processAll();
 //        input.processAll();
@@ -36,7 +37,6 @@ public class Main {
 //      Process one
 //        input.process(TextProcessors.SortProcessor.class);
 
-        input.processAll();
 
 //        input.process(TextProcessors.GroupedProcessor.class);
 

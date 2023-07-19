@@ -41,13 +41,6 @@ public class TextProcessorMapper {
 //        return "Method Name: " + methodName + ", Processor Name: " + processorName;
 //    }
 
-//    public static List<String> getAllMethodNames() {
-//        List<String> processorNames = new ArrayList<>();
-//        for (Class<? extends TextProcessor.Processor> processorClass : METHOD_MAP.keySet()) {
-//            processorNames.add(getMethodName(processorClass));
-//        }
-//        return processorNames;
-//    }
 
 //    public static List<String> getAllProcessorNames() {
 //        List<String> processorNames = new ArrayList<>();
@@ -73,5 +66,18 @@ public class TextProcessorMapper {
             }
         }
         return processors;
+    }
+
+    public static List<String> getAllMethodNames(TextProcessors instance) {
+        List<String> processorNames = new ArrayList<String>();
+        for (Class<?> innerClass : instance.getClass().getDeclaredClasses()) {
+            processorNames.add(getMethodName((Class<? extends TextProcessor>) innerClass));
+//        for
+            for (Class<? extends TextProcessor> processorClass : METHOD_MAP.keySet()) {
+                processorClass.getClass();
+                processorNames.add(getMethodName(processorClass));
+            }
+        }
+        return processorNames;
     }
 }
