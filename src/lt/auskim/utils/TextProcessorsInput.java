@@ -5,25 +5,31 @@ import lt.auskim.TextProcessors;
 import java.io.*;
 import java.util.*;
 
-public class TextProcessorsInput {
-    private TextProcessors textProcessors;
+public class TextProcessorsInput<T extends TextProcessors> {
+    private T textProcessors;
     private List<String> words;
     private List<String> processedWords;
     //    private boolean processingRequired; // New flag to determine if processing is needed
-    private Map<Class<? extends TextProcessor.Processor>, Boolean> processingRequiredList;
+//    private Map<Class<? extends TextProcessor.Processor>, Boolean> processingRequiredList;
 
-    private TextProcessor.Processor processor;
+    private TextProcessor processor;
 
     private String outputDirectory;
 
-    public TextProcessorsInput(TextProcessors textProcessors, String filePath) {
+    public TextProcessorsInput(T textProcessors, String filePath) {
         outputDirectory = "output/";
         this.textProcessors = textProcessors;
-        words = textProcessors.words;
+        words = textProcessors.processWords;
         processedWords = new ArrayList<>();
-        processingRequiredList = new HashMap<>();
+//        processingRequiredList = new HashMap<>();
         readFromFile(filePath);
     }
+
+    public List<String> getWords() {
+//      We pass referance to words, not data itself, i hope...?
+        return words;
+    }
+
 
     private void readFromFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -39,14 +45,11 @@ public class TextProcessorsInput {
                     }
                 }
             }
-            List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
-            for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
-                processingRequiredList.put(processorClass, true);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public void addNewText(String newText) {
         newText = newText.trim(); // Trim leading and trailing whitespace
@@ -61,15 +64,29 @@ public class TextProcessorsInput {
     }
 
 
-    public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
+//    public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
+//        try {
+////            if (processingRequiredList.get(processorClass)) {
+//                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
+////                TextProcessorMapper.registerProcessor(processor);
+//                processedWords = processor.process(words);
+//                this.processor = processor;
+////                processingRequiredList.put(processorClass, false);
+//                writeProcessedWordsToFile(processorClass);
+////            }
+//            return processedWords;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Collections.emptyList();
+//        }
+//    }
+
+    public List<String> process(Class<? extends TextProcessor> processorClass) {
         try {
-            if (processingRequiredList.get(processorClass)) {
-                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-                processedWords = processor.process();
-                this.processor = processor;
-                processingRequiredList.put(processorClass, false);
-                writeProcessedWordsToFile(processorClass);
-            }
+            TextProcessor processor = processorClass.getDeclaredConstructor().newInstance();
+            processedWords = processor.process(words);
+            this.processor = processor;
+            writeProcessedWordsToFile(processorClass);
             return processedWords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,17 +94,20 @@ public class TextProcessorsInput {
         }
     }
 
-    public void processAll() {
-        List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
-        for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
-            try {
-//                processingRequired = true;
-                this.process(processorClass);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
+//    public void processAll() {
+//        List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
+////        System.out.println(processorClasses);
+//        for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
+//            try {
+//                System.out.println("from process All" + processorClass);
+////                processingRequired = true;
+//                this.process(processorClass);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     public void printWords() {
         if (processedWords.isEmpty()) {
@@ -99,31 +119,31 @@ public class TextProcessorsInput {
         }
     }
 
-    public void deleteAllOutputFiles() {
-        List<String> methodNames = TextProcessorMapper.getAllMethodNames();
-        String outputDirectory = "output/";
+//    public void deleteAllOutputFiles() {
+//        List<String> methodNames = TextProcessorMapper.getAllMethodNames();
+//        String outputDirectory = "output/";
+//
+//        for (String methodName : methodNames) {
+//            String outputFile = outputDirectory + "output." + methodName;
+//
+//            try {
+//                File file = new File(outputFile);
+//                if (file.exists()) {
+//                    if (file.delete()) {
+//                        System.out.println("Deleted: " + outputFile);
+//                    } else {
+//                        System.out.println("Failed to delete: " + outputFile);
+//                    }
+//                } else {
+//                    System.out.println("File not found: " + outputFile);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-        for (String methodName : methodNames) {
-            String outputFile = outputDirectory + "output." + methodName;
-
-            try {
-                File file = new File(outputFile);
-                if (file.exists()) {
-                    if (file.delete()) {
-                        System.out.println("Deleted: " + outputFile);
-                    } else {
-                        System.out.println("Failed to delete: " + outputFile);
-                    }
-                } else {
-                    System.out.println("File not found: " + outputFile);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void writeProcessedWordsToFile(Class<? extends TextProcessor.Processor> processor) {
+    public void writeProcessedWordsToFile(Class<? extends TextProcessor> processor) {
         if (processedWords.isEmpty()) {
             System.out.println("No processed words to write. Please run process() first.");
             return;

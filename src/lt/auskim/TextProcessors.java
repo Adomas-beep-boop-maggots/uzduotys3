@@ -4,36 +4,49 @@ import lt.auskim.utils.TextProcessor;
 import java.util.*;
 
 public class TextProcessors {
-    public List<String> words;
+    public static List<String> processWords;
 
     public TextProcessors() {
-        words = new ArrayList<>();
+        processWords = new ArrayList<>();
     }
 
+//    @TextProcessor.MethodName("sort")
+//    public class SortProcessor implements TextProcessor.Processor {
+//        @Override
+//        public List<String> process(List<String> words) {
+//            List<String> sortedWords = new ArrayList<>(processWords);
+//            Collections.sort(sortedWords);
+//            return sortedWords;
+//        }
+//    }
+
     @TextProcessor.MethodName("sort")
-    public class SortProcessor implements TextProcessor.Processor {
+    public static class SortProcessor extends TextProcessor {
         @Override
-        public List<String> process() {
-            List<String> sortedWords = new ArrayList<>(words);
-            Collections.sort(sortedWords);
-            return sortedWords;
+        public List<String> process(List<String> words) {
+            List<String> result = new ArrayList<>();
+            for (String s : words) {
+                result.add(s.toUpperCase());
+            }
+            return result;
         }
+
     }
 
     @TextProcessor.MethodName("unique")
-    public class UniqueProcessor implements TextProcessor.Processor {
+    public static class UniqueProcessor extends TextProcessor {
         @Override
-        public List<String> process() {
-            Set<String> uniqueWords = new HashSet<>(words);
+        public List<String> process(List<String> words) {
+            Set<String> uniqueWords = new HashSet<>(processWords);
             return new ArrayList<>(uniqueWords);
         }
     }
     @TextProcessor.MethodName("grouped")
-    public class GroupedProcessor implements TextProcessor.Processor {
+    public static class GroupedProcessor extends TextProcessor {
         @Override
-        public List<String> process() {
+        public List<String> process(List<String> words) {
             Map<String, Integer> wordOccurrences = new HashMap<>();
-            for (String word : words) {
+            for (String word : processWords) {
                 wordOccurrences.put(word, wordOccurrences.getOrDefault(word, 0) + 1);
             }
 
