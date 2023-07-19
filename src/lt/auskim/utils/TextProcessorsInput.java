@@ -9,7 +9,7 @@ public class TextProcessorsInput {
     private TextProcessors textProcessors;
     private List<String> words;
     private List<String> processedWords;
-//    private boolean processingRequired; // New flag to determine if processing is needed
+    //    private boolean processingRequired; // New flag to determine if processing is needed
     private Map<Class<? extends TextProcessor.Processor>, Boolean> processingRequiredList;
 
     private TextProcessor.Processor processor;
@@ -47,6 +47,19 @@ public class TextProcessorsInput {
             e.printStackTrace();
         }
     }
+
+    public void addNewText(String newText) {
+        newText = newText.trim(); // Trim leading and trailing whitespace
+        if (!newText.isEmpty()) { // Skip empty lines
+            String[] wordsInLine = newText.split("\\W+");
+            for (String word : wordsInLine) {
+                if (!word.isEmpty()) {
+                    words.add(word.toLowerCase());
+                }
+            }
+        }
+    }
+
 
     public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
         try {
