@@ -31,10 +31,6 @@ Group and Write Unique Words with Occurrences
 ```java
 input.process(TextProcessors.GroupedProcessor.class);
 ```
-Print words
-```java
-input.printWords();
-```
 Delete Processed Files
 ```java
 input.deleteAllOutputFiles();
