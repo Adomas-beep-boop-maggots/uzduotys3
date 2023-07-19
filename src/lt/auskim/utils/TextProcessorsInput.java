@@ -5,12 +5,14 @@ import lt.auskim.TextProcessors;
 import java.io.*;
 import java.util.*;
 
+import static lt.auskim.utils.TextProcessorMapper.getAllProcessorClasses;
+
 public class TextProcessorsInput<T extends TextProcessors> {
     private T textProcessors;
     private List<String> words;
     private List<String> processedWords;
     //    private boolean processingRequired; // New flag to determine if processing is needed
-//    private Map<Class<? extends TextProcessor.Processor>, Boolean> processingRequiredList;
+    private Map<Class<? extends TextProcessor>, Boolean> processingRequiredList;
 
     private TextProcessor processor;
 
@@ -21,17 +23,21 @@ public class TextProcessorsInput<T extends TextProcessors> {
         this.textProcessors = textProcessors;
         words = textProcessors.processWords;
         processedWords = new ArrayList<>();
-//        processingRequiredList = new HashMap<>();
+        processingRequiredList = new HashMap<>();
+        List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
+        // Set all the processor classes to true
+        for (Class<? extends TextProcessor> processorClass : processorClasses) {
+            processingRequiredList.put(processorClass, true);
+        }
         readFromFile(filePath);
-    }
-
-    public List<String> getWords() {
-//      We pass referance to words, not data itself, i hope...?
-        return words;
     }
 
 
     private void readFromFile(String filePath) {
+        List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
+       for (Class<? extends TextProcessor> processorClass : processorClasses) {
+            processingRequiredList.put(processorClass, true);
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -63,29 +69,15 @@ public class TextProcessorsInput<T extends TextProcessors> {
         }
     }
 
-
-//    public List<String> process(Class<? extends TextProcessor.Processor> processorClass) {
-//        try {
-////            if (processingRequiredList.get(processorClass)) {
-//                TextProcessor.Processor processor = processorClass.getDeclaredConstructor(textProcessors.getClass()).newInstance(textProcessors);
-//                processedWords = processor.process(words);
-//                this.processor = processor;
-////                processingRequiredList.put(processorClass, false);
-//                writeProcessedWordsToFile(processorClass);
-////            }
-//            return processedWords;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return Collections.emptyList();
-//        }
-//    }
-
     public List<String> process(Class<? extends TextProcessor> processorClass) {
         try {
-            TextProcessor processor = processorClass.getDeclaredConstructor().newInstance();
-            processedWords = processor.process(words);
-            this.processor = processor;
-            writeProcessedWordsToFile(processorClass);
+            if (processingRequiredList.get(processorClass)) {
+                TextProcessor processor = processorClass.getDeclaredConstructor().newInstance();
+                processedWords = processor.process(words);
+                this.processor = processor;
+                processingRequiredList.put(processorClass, false);
+                writeProcessedWordsToFile(processorClass);
+            }
             return processedWords;
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,11 +87,11 @@ public class TextProcessorsInput<T extends TextProcessors> {
 
 
     public void processAll() {
-        List<Class<? extends TextProcessor>> processorClasses = TextProcessorMapper.getAllProcessorClasses(textProcessors);
+        List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
 //        System.out.println(processorClasses);
         for (Class<? extends TextProcessor> processorClass : processorClasses) {
             try {
-                System.out.println("from process All" + processorClass);
+//                System.out.println("from process All" + processorClass);
 //                processingRequired = true;
                 this.process(processorClass);
             } catch (Exception e) {
