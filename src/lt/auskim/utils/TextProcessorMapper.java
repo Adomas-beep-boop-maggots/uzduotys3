@@ -22,34 +22,6 @@ public class TextProcessorMapper {
         return METHOD_MAP.getOrDefault(processorClass, processorClass.getSimpleName());
     }
 
-//    public static String getProcessorName(Class<? extends TextProcessor.Processor> processorClass) {
-//        return processorClass.getSimpleName();
-//    }
-
-//    public static Class<? extends TextProcessor.Processor> getProcessorClass(String methodName) {
-//        for (Map.Entry<Class<? extends TextProcessor.Processor>, String> entry : METHOD_MAP.entrySet()) {
-//            if (entry.getValue().equals(methodName)) {
-//                return entry.getKey();
-//            }
-//        }
-//        return null;
-//    }
-
-//    public static String getMethodAndProcessorName(Class<? extends TextProcessor.Processor> processorClass) {
-//        String methodName = getMethodName(processorClass);
-//        String processorName = processorClass.getSimpleName();
-//        return "Method Name: " + methodName + ", Processor Name: " + processorName;
-//    }
-
-
-//    public static List<String> getAllProcessorNames() {
-//        List<String> processorNames = new ArrayList<>();
-//        for (Class<? extends TextProcessor.Processor> processorClass : METHOD_MAP.keySet()) {
-//            processorNames.add(getProcessorName(processorClass));
-//        }
-//        return processorNames;
-//    }
-
     public static List<Class<? extends TextProcessor>> getAllProcessorClasses(TextProcessors instance) {
         List<Class<? extends TextProcessor>> processors = new ArrayList<>();
         Class<? extends TextProcessors> enclosingClass = instance.getClass();
@@ -72,11 +44,6 @@ public class TextProcessorMapper {
         List<String> processorNames = new ArrayList<String>();
         for (Class<?> innerClass : instance.getClass().getDeclaredClasses()) {
             processorNames.add(getMethodName((Class<? extends TextProcessor>) innerClass));
-//        for
-            for (Class<? extends TextProcessor> processorClass : METHOD_MAP.keySet()) {
-                processorClass.getClass();
-                processorNames.add(getMethodName(processorClass));
-            }
         }
         return processorNames;
     }

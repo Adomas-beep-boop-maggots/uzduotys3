@@ -27,26 +27,26 @@ public class Main {
     public static void main(String[] args) {
         TextProcessors textProcessors = new TextProcessors();
         TextProcessorsInput input = new TextProcessorsInput(textProcessors, "input.txt");
-//
-//        input.processAll();
-//        input.deleteAllOutputFiles();
+
 //      Process all
         input.processAll();
         input.processAll();
 
-//        input.processAll();
+//      Delete all files
+        input.deleteAllOutputFiles();
 
-//      Process one
-//        input.process(TextProcessors.SortProcessor.class);
-
-
-//        input.process(TextProcessors.GroupedProcessor.class);
+////      Process one
+        input.process(TextProcessors.SortProcessor.class);
+        input.deleteAllOutputFiles();
 
 //      Custom processor
-//        TextProcessors myTextProcessors = new MyTextProcessors();
-//        TextProcessorsInput myInput = new TextProcessorsInput(myTextProcessors, "input.txt");
-//        myInput.processAll();
-//        myInput.process(MyTextProcessors.UppercaseProcessor.class);
+        TextProcessors myTextProcessors = new MyTextProcessors();
+        TextProcessorsInput myInput = new TextProcessorsInput(myTextProcessors, "input.txt");
+        myInput.processAll();
+        myInput.process(MyTextProcessors.UppercaseProcessor.class);
+
+//      Delete custom files
+        myInput.deleteAllOutputFiles();
 
 
     }

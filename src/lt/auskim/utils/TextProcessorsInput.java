@@ -11,7 +11,6 @@ public class TextProcessorsInput<T extends TextProcessors> {
     private T textProcessors;
     private List<String> words;
     private List<String> processedWords;
-    //    private boolean processingRequired; // New flag to determine if processing is needed
     private Map<Class<? extends TextProcessor>, Boolean> processingRequiredList;
 
     private TextProcessor processor;
@@ -35,7 +34,7 @@ public class TextProcessorsInput<T extends TextProcessors> {
 
     private void readFromFile(String filePath) {
         List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
-       for (Class<? extends TextProcessor> processorClass : processorClasses) {
+        for (Class<? extends TextProcessor> processorClass : processorClasses) {
             processingRequiredList.put(processorClass, true);
         }
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -88,11 +87,8 @@ public class TextProcessorsInput<T extends TextProcessors> {
 
     public void processAll() {
         List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
-//        System.out.println(processorClasses);
         for (Class<? extends TextProcessor> processorClass : processorClasses) {
             try {
-//                System.out.println("from process All" + processorClass);
-//                processingRequired = true;
                 this.process(processorClass);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -111,6 +107,10 @@ public class TextProcessorsInput<T extends TextProcessors> {
     }
 
     public void deleteAllOutputFiles() {
+        List<Class<? extends TextProcessor>> processorClasses = getAllProcessorClasses(textProcessors);
+        for (Class<? extends TextProcessor> processorClass : processorClasses) {
+            processingRequiredList.put(processorClass, true);
+        }
         List<String> methodNames = TextProcessorMapper.getAllMethodNames(textProcessors);
         String outputDirectory = "output/";
 
@@ -125,9 +125,10 @@ public class TextProcessorsInput<T extends TextProcessors> {
                     } else {
                         System.out.println("Failed to delete: " + outputFile);
                     }
-                } else {
-                    System.out.println("File not found: " + outputFile);
                 }
+//                else {
+//                    System.out.println("File not found: " + outputFile);
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -141,7 +142,6 @@ public class TextProcessorsInput<T extends TextProcessors> {
         }
 
         String processorName = TextProcessorMapper.getMethodName(processor);
-//        String outputDirectory = "output/";
         String outputFile = outputDirectory + "output." + processorName;
 
         try {
