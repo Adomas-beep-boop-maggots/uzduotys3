@@ -34,9 +34,9 @@ public class Main {
 //        input.processAll();
 
 //      Process one
-        input.process(TextProcessors.SortProcessor.class);
+//        input.process(TextProcessors.SortProcessor.class);
 
-//        input.processAll();
+        input.processAll();
 
 //        input.process(TextProcessors.GroupedProcessor.class);
 

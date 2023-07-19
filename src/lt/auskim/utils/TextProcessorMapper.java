@@ -1,5 +1,7 @@
 package lt.auskim.utils;
 
+import lt.auskim.TextProcessors;
+
 import java.util.*;
 
 public class TextProcessorMapper {
@@ -55,8 +57,21 @@ public class TextProcessorMapper {
 //        return processorNames;
 //    }
 
-//    public static List<Class<? extends TextProcessor.Processor>> getAllProcessorClasses() {
-//        System.out.println("Map looks like this " + METHOD_MAP);
-//        return new ArrayList<>(METHOD_MAP.keySet());
-//    }
+    public static List<Class<? extends TextProcessor>> getAllProcessorClasses(TextProcessors instance) {
+        List<Class<? extends TextProcessor>> processors = new ArrayList<>();
+        Class<? extends TextProcessors> enclosingClass = instance.getClass();
+
+        for (Class<?> innerClass : enclosingClass.getDeclaredClasses()) {
+            if (TextProcessor.class.isAssignableFrom(innerClass)) {
+                try {
+//                    Class<? extends TextProcessor> processorInstance = innerClass.getDeclaredConstructor().newInstance();
+                    Class<? extends TextProcessor> processorClass = innerClass.asSubclass(TextProcessor.class);
+                    processors.add(processorClass);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return processors;
+    }
 }

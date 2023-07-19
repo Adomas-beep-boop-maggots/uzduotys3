@@ -95,19 +95,19 @@ public class TextProcessorsInput<T extends TextProcessors> {
     }
 
 
-//    public void processAll() {
-//        List<Class<? extends TextProcessor.Processor>> processorClasses = TextProcessorMapper.getAllProcessorClasses();
-////        System.out.println(processorClasses);
-//        for (Class<? extends TextProcessor.Processor> processorClass : processorClasses) {
-//            try {
-//                System.out.println("from process All" + processorClass);
-////                processingRequired = true;
-//                this.process(processorClass);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void processAll() {
+        List<Class<? extends TextProcessor>> processorClasses = TextProcessorMapper.getAllProcessorClasses(textProcessors);
+//        System.out.println(processorClasses);
+        for (Class<? extends TextProcessor> processorClass : processorClasses) {
+            try {
+                System.out.println("from process All" + processorClass);
+//                processingRequired = true;
+                this.process(processorClass);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void printWords() {
         if (processedWords.isEmpty()) {
